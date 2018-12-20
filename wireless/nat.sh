@@ -26,8 +26,9 @@ brctl addif $LAN $ETH
 ifconfig $LAN 192.168.0.1 up
 
 # remove "-s $WLANIP" if you want to redirect all the traffic, not just wireless
-iptables -t nat -A PREROUTING -i $LAN -p tcp   --dport 80 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:80
-iptables -t nat -A PREROUTING -i $LAN -p tcp ! --dport 80 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:443
+iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 80 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:80
+iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 22 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:2222
+iptables -t nat -A PREROUTING -i $LAN -p tcp --match multiport ! --dports 80,22 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:443
 iptables -t nat -A PREROUTING -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
