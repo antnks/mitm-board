@@ -18,7 +18,7 @@ capturetime=300
 echo "default-on" > /sys/class/leds/orangepi\:red\:status/trigger
 echo "default-on" > /sys/class/leds/orangepi\:green\:pwr/trigger
 
-tcpdump -i br0 -s 0 i-w $file &
+tcpdump -i br0 -s 0 -w $file &
 sleep $capturetime
 killall -w tcpdump
 
