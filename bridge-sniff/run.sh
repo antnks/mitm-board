@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 # Start capture on boot and upload the result to sftp server
+# $1 param - working directory
 #
 
-USERDIR=/home/user
+USERDIR=$1
 GPGID=00112233
 SFTPSRV=remoteserver
 SFTPCREDS=username,password
