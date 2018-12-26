@@ -22,6 +22,8 @@ brctl addif br0 eth0
 brctl addif br0 enx00606e014ab1
 ifconfig br0 0.0.0.0 up
 
+./hotspot.sh
+
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap
 
