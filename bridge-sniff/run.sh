@@ -11,8 +11,8 @@ SFTPCREDS=username,password
 CAPTURETIME=300
 GPIOPIN=9
 
+source $USERDIR/config.txt
 cd $USERDIR
-source config.txt
 
 gpio mode $GPIOPIN in
 
