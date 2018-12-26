@@ -9,6 +9,7 @@ SFTPSRV=remoteserver
 SFTPCREDS=username,password
 
 cd $USERDIR
+source config.txt
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap
