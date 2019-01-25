@@ -1,17 +1,18 @@
 #!/bin/bash
 #
 # Start capture on boot and upload the result to sftp server
+# $1 param - working directory
 #
 
-USERDIR=/home/user
+USERDIR=$1
 GPGID=00112233
 SFTPSRV=remoteserver
 SFTPCREDS=username,password
 CAPTURETIME=300
 GPIOPIN=9
 
+source $USERDIR/config.txt
 cd $USERDIR
-source config.txt
 
 gpio mode $GPIOPIN in
 
@@ -20,6 +21,8 @@ brctl addbr br0
 brctl addif br0 eth0
 brctl addif br0 enx00606e014ab1
 ifconfig br0 0.0.0.0 up
+
+./hotspot.sh
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap
