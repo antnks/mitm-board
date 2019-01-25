@@ -42,7 +42,7 @@ echo "heartbeat" > /sys/class/leds/orangepi\:green\:pwr/trigger
 # check input pin for silent mode
 # if jumper is set - bridge will request DHCP and upload
 pinstatus=`gpio read 9`
-if [ "$pinstatus" == 0 ]
+if [ "$pinstatus" == "0" ]
 then
 	dhclient br0
 	gzip $file
