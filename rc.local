@@ -28,10 +28,9 @@ fi
 if [ "$pinstatushcap" == "0" ]
 then
 	$MITMTOOLS/hcdump/run.sh $MITMTOOLS &
-# esle - bridge sniff mode on
+# else - bridge sniff mode on
 else
 	$MITMTOOLS/bridge-sniff/run.sh $MITMTOOLS &
 fi
 
 exit 0
-
