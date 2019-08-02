@@ -5,21 +5,25 @@
 #
 
 USERDIR=$1
+
 GPGID=00112233
 SFTPSRV=remoteserver
 SFTPCREDS=username,password
-CAPTURETIME=300
-GPIOPIN=9
+BCAPTURETIME=300
+PINUPLOAD=5
+INETIF=eth0
+MITMIF=eth1
+SHUTDOWN=0
 
 source $USERDIR/config.txt
-cd $USERDIR
+cd $USERDIR/bridge-sniff
 
-gpio mode $GPIOPIN in
+gpio mode $PINUPLOAD in
 
 service network-manager stop
 brctl addbr br0
-brctl addif br0 eth0
-brctl addif br0 enx00606e014ab1
+brctl addif br0 $INETIF
+brctl addif br0 $MITMIF
 ifconfig br0 0.0.0.0 up
 
 ./hotspot.sh
@@ -32,7 +36,7 @@ echo "default-on" > /sys/class/leds/orangepi\:red\:status/trigger
 echo "default-on" > /sys/class/leds/orangepi\:green\:pwr/trigger
 
 tcpdump -i br0 -s 0 -w $file &
-sleep $CAPTURETIME
+sleep $BCAPTURETIME
 killall -w tcpdump
 
 # start upload
@@ -41,7 +45,7 @@ echo "heartbeat" > /sys/class/leds/orangepi\:green\:pwr/trigger
 
 # check input pin for silent mode
 # if jumper is set - bridge will request DHCP and upload
-pinstatus=`gpio read 9`
+pinstatus=`gpio read $PINUPLOAD`
 if [ "$pinstatus" == "0" ]
 then
 	dhclient br0
@@ -57,5 +61,8 @@ fi
 echo "default-on" > /sys/class/leds/orangepi\:green\:pwr/trigger
 echo "heartbeat" > /sys/class/leds/orangepi\:red\:status/trigger
 
-#shutdown -h now
-
+# shutdown when finished
+if [ "$SHUTDOWN" != "0" ]
+then
+	shutdown -h now
+fi

@@ -4,32 +4,33 @@ echo "heartbeat" > /sys/class/leds/orangepi:red:status/trigger
 #/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -j DROP
 
 PINONOFF=9
-PINHCAP=5
-PINNOIP=4
+PINHCAP=4
+PINUPLOAD=5
 
 MITMTOOLS=/home/user/mitm-tools
 source $MITMTOOLS/config.txt
 
 gpio mode $PINONOFF in
 gpio mode $PINHCAP in
-gpio mode $PINNOIP in
+gpio mode $PINUPLOAD in
 
 pinstatusonoff=`gpio read $PINONOFF`
 pinstatushcap=`gpio read $PINHCAP`
-pinstatusnoip=`gpio read $PINNOIP`
+pinstatusnoip=`gpio read $PINUPLOAD`
 
-# if pin is open
+# if pin is open, jumper is not set
 if [ "$pinstatusonoff" == "1" ]
 then
 	exit 0
 fi
 
-# if hcap pin is closed
+# if hcap pin is closed, jumper is set - hcdump mode on
 if [ "$pinstatushcap" == "0" ]
 then
-	$MITMTOOLS/hcdump/run.sh $MITMTOOLS/hcdump &
+	$MITMTOOLS/hcdump/run.sh $MITMTOOLS &
+# esle - bridge sniff mode on
 else
-	$MITMTOOLS/bridge-sniff/run.sh $MITMTOOLS/bridge-sniff &
+	$MITMTOOLS/bridge-sniff/run.sh $MITMTOOLS &
 fi
 
 exit 0

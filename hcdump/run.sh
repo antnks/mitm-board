@@ -5,11 +5,13 @@
 #
 
 USERDIR=$1
+
 WLAN=wlan0
-CAPTURETIME=300
+HCAPTURETIME=300
+SHUTDOWN=0
 
 source $USERDIR/config.txt
-cd $USERDIR
+cd $USERDIR/hcdump
 
 service network-manager stop
 killall wpa_supplicant
@@ -23,12 +25,15 @@ echo "default-on" > /sys/class/leds/orangepi\:red\:status/trigger
 echo "default-on" > /sys/class/leds/orangepi\:green\:pwr/trigger
 
 hcxdumptool -i $WLAN -o $file &
-sleep $CAPTURETIME
+sleep $HCAPTURETIME
 killall -w hcxdumptool
 
 # idle
 echo "default-on" > /sys/class/leds/orangepi\:green\:pwr/trigger
 echo "heartbeat" > /sys/class/leds/orangepi\:red\:status/trigger
 
-#shutdown -h now
-
+# shutdown when finished
+if [ "$SHUTDOWN" != "0" ]
+then
+	shutdown -h now
+fi
