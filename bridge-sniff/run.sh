@@ -26,7 +26,7 @@ brctl addif br0 $INETIF
 brctl addif br0 $MITMIF
 ifconfig br0 0.0.0.0 up
 
-./hotspot.sh
+./hotspot.sh $USERDIR
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap
