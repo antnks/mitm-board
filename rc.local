@@ -7,7 +7,7 @@ PINONOFF=9
 PINMODE=4
 PINUPLOAD=5
 
-MITMTOOLS=/home/user/mitm-tools
+MITMTOOLS=/home/user/mitm-board
 source $MITMTOOLS/config.txt
 
 gpio mode $PINONOFF in
@@ -17,6 +17,8 @@ gpio mode $PINUPLOAD in
 pinstatusonoff=`gpio read $PINONOFF`
 pinstatushcap=`gpio read $PINMODE`
 pinstatusnoip=`gpio read $PINUPLOAD`
+
+$MITMTOOLS/hotspot/hotspot.sh $MITMTOOLS &
 
 # if pin is open, jumper is not set
 if [ "$pinstatusonoff" == "1" ]

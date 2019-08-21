@@ -18,15 +18,16 @@ SHUTDOWN=0
 source $USERDIR/config.txt
 cd $USERDIR/bridge-sniff
 
+service network-manager stop
+killall wpa_supplicant
+killall dhclient
+
 gpio mode $PINUPLOAD in
 
-service network-manager stop
 brctl addbr br0
 brctl addif br0 $INETIF
 brctl addif br0 $MITMIF
 ifconfig br0 0.0.0.0 up
-
-./hotspot.sh $USERDIR
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap
