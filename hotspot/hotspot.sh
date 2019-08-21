@@ -26,7 +26,7 @@ killall -w wpa_supplicant
 sed "s/interface=.*/interface=$HOSTAPIF/g" -i hostapd.conf
 sed "s/wpa_passphrase=.*/wpa_passphrase=$HOSTAPPSW/g" -i hostapd.conf
 sed "s/ssid=.*/ssid=$HOSTAPSSID/g" -i hostapd.conf
-sed "s/interface=.*/interface=$HOSTIF/g" -i dnsmasq.conf
+sed "s/interface=.*/interface=$HOSTAPIF/g" -i dnsmasq.conf
 sed "s/address=.*/address=\/#\/$DNSMASQRESP/g" -i dnsmasq.conf
 sed "s/dhcp-range=.*/dhcp-range=$DNSMASQRANGE,12h/g" -i dnsmasq.conf
 
