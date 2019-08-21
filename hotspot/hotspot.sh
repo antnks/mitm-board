@@ -33,3 +33,4 @@ sed "s/dhcp-range=.*/dhcp-range=$DNSMASQRANGE.50,$DNSMASQRANGE.150,12h/g" -i dns
 ifconfig $HOSTAPIF $HOSTAPIP up
 hostapd hostapd.conf &
 dnsmasq -C dnsmasq.conf
+
