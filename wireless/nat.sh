@@ -43,6 +43,6 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 iptables --table nat --append POSTROUTING --out-interface $WAN -j MASQUERADE
 iptables --append FORWARD --in-interface $LAN -j ACCEPT
 
-hostapd hostap.conf -B
+hostapd hostapd.conf -B
 dnsmasq -C dnsmasq.conf
 
