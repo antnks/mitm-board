@@ -13,6 +13,8 @@ then
 	exit 1
 fi
 
+cd $USERDIR/wireless/
+
 service network-manager stop
 killall -w hostapd
 killall -w dnsmasq
