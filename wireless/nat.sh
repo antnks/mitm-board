@@ -35,6 +35,8 @@ LAN=$BR
 
 if [ ! -z "$REDIRECT" ]
 then
+	iptables -F
+
 	TARGET=""
 	if [ ! -z "$SINGLETARGET" ]
 	then
