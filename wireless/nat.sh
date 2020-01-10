@@ -4,15 +4,19 @@
 # Tested using invisible Burp proxy
 #
 
-WAN=eth0
-LAN=br-lan
-ETH=eth1
-WLAN=wlan1
-WLANIP=192.168.0.10
-BURP=192.168.1.2
+USERDIR=$1
 
+source $USERDIR/config.txt
+if [ -z "$DNSMASQSUBNET" ]
+then
+	echo "Cannot source the configuartion"
+	exit 1
+fi
+
+service network-manager stop
+killall -w hostapd
+killall -w dnsmasq
 killall -w wpa_supplicant
-killall dnsmasq
 rfkill unblock wlan
 
 ifconfig $WLAN 0.0.0.0
@@ -20,15 +24,17 @@ ifconfig $ETH 0.0.0.0
 
 iw dev $WLAN set 4addr on
 
-brctl addbr $LAN
-brctl addif $LAN $WLAN
-brctl addif $LAN $ETH
-ifconfig $LAN 192.168.0.1 up
+brctl addbr $BR
+brctl addif $BR $WLAN
+brctl addif $BR $ETH
+ifconfig $BR $DEFAULTGW up
 
-# remove "-s $WLANIP" if you want to redirect all the traffic, not just wireless
-iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 80 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:80
-iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 22 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:2222
-iptables -t nat -A PREROUTING -i $LAN -p tcp --match multiport ! --dports 80,22 -s $WLANIP -m conntrack --ctstate NEW -j DNAT --to $BURP:443
+LAN=$BR
+
+# remove "-s $VICTIMIP" if you want to redirect all the traffic, not just wireless
+iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 80 -s $VICTIMIP -m conntrack --ctstate NEW -j DNAT --to $BURP:80
+iptables -t nat -A PREROUTING -i $LAN -p tcp --dport 22 -s $VICTIMIP -m conntrack --ctstate NEW -j DNAT --to $BURP:2222
+iptables -t nat -A PREROUTING -i $LAN -p tcp --match multiport ! --dports 80,22 -s $VICTIMIP -m conntrack --ctstate NEW -j DNAT --to $BURP:443
 iptables -t nat -A PREROUTING -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 echo 1 > /proc/sys/net/ipv4/ip_forward

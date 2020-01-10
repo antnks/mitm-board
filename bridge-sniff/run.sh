@@ -6,28 +6,30 @@
 
 USERDIR=$1
 
-GPGID=00112233
-SFTPSRV=remoteserver
-SFTPCREDS=username,password
-BCAPTURETIME=300
-PINUPLOAD=5
-INETIF=eth0
-MITMIF=eth1
-SHUTDOWN=0
-
 source $USERDIR/config.txt
+if [ -z "$DNSMASQSUBNET" ]
+then
+        echo "Cannot source the configuartion"
+        exit 1
+fi
+
 cd $USERDIR/bridge-sniff
 
 service network-manager stop
-killall wpa_supplicant
-killall dhclient
+killall -w hostapd
+killall -w dnsmasq
+killall -w wpa_supplicant
+rfkill unblock wlan
+
+INETIF=$WAN
+MITMIF=$ETH
 
 gpio mode $PINUPLOAD in
 
-brctl addbr br0
-brctl addif br0 $INETIF
-brctl addif br0 $MITMIF
-ifconfig br0 0.0.0.0 up
+brctl addbr $BR
+brctl addif $BR $INETIF
+brctl addif $BR $MITMIF
+ifconfig $BR 0.0.0.0 up
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=capture-$stamp.pcap

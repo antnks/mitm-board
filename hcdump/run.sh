@@ -6,16 +6,22 @@
 
 USERDIR=$1
 
-WLAN=wlan0
-HCAPTURETIME=300
-SHUTDOWN=0
-
 source $USERDIR/config.txt
-cd $USERDIR/hcdump
+if [ -z "$DNSMASQSUBNET" ]
+then
+	echo "Cannot source the configuartion"
+	exit 1
+fi
+
+cd $USERDIR/hcdump/
 
 service network-manager stop
-killall wpa_supplicant
-killall dhclient
+killall -w hostapd
+killall -w dnsmasq
+killall -w wpa_supplicant
+rfkill unblock wlan
+
+WLAN=$HOSTAPIF
 
 stamp=`date +%Y%m%d-%H%M%S`
 file=hcapture-$stamp.pcap
