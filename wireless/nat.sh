@@ -27,6 +27,8 @@ killall -w dnsmasq
 killall -w wpa_supplicant
 rfkill unblock wlan
 
+WLAN="$HOSTAPIF"
+
 ifconfig $WLAN 0.0.0.0
 ifconfig $ETH 0.0.0.0
 
