@@ -67,7 +67,7 @@ if [ ! -z "$REDIRECT" ]
 then
 	sed "s/address=.*/address=\/#\/$BURP/g" -i dnsmasq.conf
 fi
-sed "s/dhcp-range=.*/dhcp-range=$DNSMASQRANGE.100,$DNSMASQRANGE.150,12h/g" -i dnsmasq.conf
+sed "s/dhcp-range=.*/dhcp-range=$DNSMASQSUBNET.100,$DNSMASQSUBNET.150,12h/g" -i dnsmasq.conf
 
 hostapd hostapd.conf -B
 dnsmasq -C dnsmasq.conf
