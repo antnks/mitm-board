@@ -15,6 +15,9 @@ fi
 
 cd $USERDIR/wireless/
 
+sudo systemctl disable systemd-resolved
+sudo systemctl stop systemd-resolved
+
 service network-manager stop
 killall -w hostapd
 killall -w dnsmasq
