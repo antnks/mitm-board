@@ -17,6 +17,9 @@ cd $USERDIR/wireless/
 
 sudo systemctl disable systemd-resolved
 sudo systemctl stop systemd-resolved
+rm /etc/resolv.conf
+sed '/\[main\]/a dns=default' -i /etc/NetworkManager/NetworkManager.conf
+sudo systemctl restart NetworkManager
 
 service network-manager stop
 killall -w hostapd
