@@ -8,6 +8,7 @@ ip link add dev wg0 type wireguard
 ip address add dev wg0 192.168.123.1/24
 wg set wg0 listen-port $PORT private-key /etc/wireguard.key
 
+# add persistent-keepalive 25 if behind a NAT
 wg set wg0 peer $PEER2 allowed-ips 192.168.123.2/32
 wg set wg0 peer $PEER3 allowed-ips 192.168.123.3/32
 
